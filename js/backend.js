@@ -6,12 +6,8 @@ window.backend = {
         try {
             let xhr = new XMLHttpRequest();  
             xhr.addEventListener('load', function() {
-                if (xhr.status == 200) {
-                    onLoad(xhr.response);
-                }
-                else {
-                    onError(); 
-                }
+                xhr == 200?  onLoad(xhr.response): onError()
+                
             });
         
             xhr.addEventListener('error', onError()); 
@@ -31,13 +27,13 @@ let responseServerCopy;
 let pictures = document.querySelector('.pictures'); 
 let pictureList ; 
  
- let loadPhotokeks = function(XHRResponse) { 
+ const loadPhotokeks  = (XHRResponse) => { 
         addTemplateImages(XHRResponse);  
         responseServerArray  = Array.from(XHRResponse);  
         responseServerCopy = responseServerArray.slice();
-        let photofilters = document.querySelector('.img-filters');  
-        let clickledImage = document.querySelectorAll('.pictures a');
-        let  removeClassButton = function() { 
+        const photofilters = document.querySelector('.img-filters');  
+        const clickledImage = document.querySelectorAll('.pictures a');
+        const  removeClassButton = function() { 
             let buttonsfiltersList = document.querySelectorAll('.img-filters__button'); 
             buttonsfiltersList.forEach(elementButton=> {
                 elementButton.classList.remove('img-filters__button--active');
@@ -47,9 +43,10 @@ let pictureList ;
             photofilters.classList.remove('img-filters--inactive'); 
             let photofiltersbutton = document.querySelector('.img-filters__form'); 
             photofiltersbutton.addEventListener('click', function(evt) { 
+                
+                removeClassButton();
                 switch (evt.target.id)  {
-                    case 'filter-default':  
-                    removeClassButton();
+                    case 'filter-default':   
                    evt.target.classList.toggle('img-filters__button--active');  
                     pictureList = document.querySelectorAll('.picture');
                     pictureList.forEach(element => {
@@ -57,11 +54,9 @@ let pictureList ;
                     });
                     addTemplateImages(responseServerArray); 
                     clickledImage = document.querySelectorAll('.pictures a'); 
-                    addBoxBigImage(clickledImage); 
+              
                     break; 
-                    case 'filter-discussed': 
-                     
-                    removeClassButton();
+                    case 'filter-discussed':  
                     evt.target.classList.toggle('img-filters__button--active');  
                     pictureList = document.querySelectorAll('.picture');
                     pictureList.forEach(element => {
@@ -72,11 +67,9 @@ let pictureList ;
                     }); 
                     addTemplateImages(arrayFiltered);            
                     clickledImage = document.querySelectorAll('.pictures a'); 
-                    addBoxBigImage(clickledImage); 
+             
                     break;     
-                    case 'filter-random':  
-                    
-                    removeClassButton();
+                    case 'filter-random':    
                     evt.target.classList.toggle('img-filters__button--active');  
                         pictureList = document.querySelectorAll('.picture');
                         pictureList.forEach(element => {
@@ -85,14 +78,17 @@ let pictureList ;
                        let arrayRandom = responseServerCopy.sort(function(){  return Math.random() - 0.5}); 
                        addTemplateImages(arrayRandom); 
                        clickledImage = document.querySelectorAll('.pictures a'); 
-                       addBoxBigImage(clickledImage); 
+                    
                      break;    
+
+                     
                 }
+                addBoxBigImage(clickledImage); 
             });
         }
         addBoxBigImage(clickledImage);   
  } 
- function addBoxBigImage(clickledImagesArray) { 
+ const  addBoxBigImage = (clickledImagesArray)  =>{ 
         for (let i=0; i< clickledImagesArray.length; i++) {
             clickledImagesArray[i].addEventListener('click', function(evt)  { 
                 document.querySelector('.big-picture__img img').src = evt.target.currentSrc;
@@ -127,11 +123,11 @@ let pictureList ;
  }
  function addTemplateImages(arrayImages) {
     for  (let indexes=0; indexes<arrayImages.length; indexes++) {   
-        let templateContent = document.querySelector('#picture').content.cloneNode(true);   
+        const templateContent = document.querySelector('#picture').content.cloneNode(true);   
         templateContent.querySelector('.picture__img').src = arrayImages[indexes]['url']; 
         templateContent.querySelector('.picture__likes').textContent =  arrayImages[indexes]['likes']; 
         templateContent.querySelector('.picture__comments').textContent =  arrayImages[indexes]['comments'].length; 
-        let contentBigPhoto = {
+        const contentBigPhoto = {
             description: arrayImages[indexes].description, 
             commentsList:   arrayImages[indexes].comments, 
         }
@@ -139,9 +135,7 @@ let pictureList ;
         pictures.appendChild(templateContent);    
     }   
  }
- let SavePhotokeks = function(XHRResponse) {
-    console.log('error' + XHRResponse); 
- }
+ 
  window.backend.load(loadPhotokeks, SavePhotokeks); 
  
  
