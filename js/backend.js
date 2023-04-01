@@ -14,8 +14,7 @@ window.backend = {
             xhr.open('GET', 'https://24.javascript.pages.academy/kekstagram/data');
             xhr.responseType = 'json'; 
             xhr.send(); 
-        } catch (error) {
-          //  console.log(error.message); 
+        } catch (error) { 
         }
     }, 
     save: function(data, onLoad, onError) {}, 
